@@ -1,0 +1,105 @@
+/* Custom styles for CapYourTube */
+
+/* Main container */
+.main .block-container {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Title styling */
+h1 {
+    color: #FF4B4B;
+    font-weight: 800;
+}
+
+h3 {
+    margin-bottom: 1.5rem;
+}
+
+/* Button styling */
+.stButton > button {
+    width: 100%;
+    border-radius: 5px;
+    height: 3rem;
+    font-weight: bold;
+    margin-top: 1rem;
+}
+
+/* File uploader */
+.uploadedFile {
+    border: 1px dashed #ccc;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+/* Text area */
+.stTextArea textarea {
+    border-radius: 5px;
+}
+
+/* Select boxes */
+.stSelectbox > div > div {
+    border-radius: 5px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    color: #888;
+}
+
+/* Preview area - UPDATED */
+[data-testid="stImage"] {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Video player - UPDATED */
+.stVideo {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 320px !important;
+    margin: 0 auto;
+}
+
+/* Video container - NEW */
+.stVideo > div {
+    max-width: 320px !important;
+    margin: 0 auto;
+}
+
+/* Video iframe - NEW */
+.stVideo iframe {
+    max-width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 9/16;
+}
+
+/* Download button */
+.stDownloadButton > button {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 5px;
+    margin-top: 1rem;
+    width: 100%;
+}
+
+/* Info boxes */
+.stAlert {
+    border-radius: 5px;
+}
+
+/* Mobile-like container for videos - NEW */
+.mobile-container {
+    max-width: 320px;
+    margin: 0 auto;
+    border: 8px solid #333;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
