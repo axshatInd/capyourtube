@@ -49,7 +49,7 @@ if not os.path.exists(model_path):
 st.title("🎬 CapYourTube")
 st.markdown("### Create captioned videos with AI voiceover - 100% Offline!")
 
-# Create columns for a better layout
+# Create columns for a better layout - main controls and preview area
 col1, col2 = st.columns([1, 1])
 
 with col1:
@@ -84,38 +84,48 @@ with col1:
     process_button = st.button("Process Video", type="primary")
 
 with col2:
-    # Preview area
-    st.markdown("### Preview")
-    preview_placeholder = st.empty()
+    # Create two columns for original and processed video previews
+    preview_col1, preview_col2 = st.columns(2)
     
-    if uploaded_file is None:
-        preview_placeholder.info("Upload a video to see preview")
-    else:
+    with preview_col1:
+        st.markdown("### Original")
+        original_preview = st.empty()
+        
+        if uploaded_file is None:
+            original_preview.info("Upload a video")
+    
+    with preview_col2:
+        st.markdown("### Captioned")
+        captioned_preview = st.empty()
+        captioned_preview.info("Process to see result")
+    
+    # Status area for processing messages
+    status_area = st.empty()
+    
+    if uploaded_file is not None:
         # Save uploaded file to a temporary file
         temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')
         temp_file.write(uploaded_file.read())
         temp_file.close()
         
-        # Display the uploaded video with mobile-like styling
-        st.markdown('<div class="mobile-container">', unsafe_allow_html=True)
-        preview_placeholder.video(temp_file.name)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Display the uploaded video
+        original_preview.video(temp_file.name)
         
         if process_button:
             with st.spinner("Processing your video..."):
                 try:
                     # Step 1: Transcribe if no custom script
+                    status_area.info("Transcribing audio (offline)...")
                     if not custom_script:
-                        st.info("Transcribing audio (offline)...")
                         custom_script = transcribe_audio(temp_file.name, model_path)
-                        st.success(f"Transcription complete: {custom_script}")
+                        status_area.success(f"Transcription complete: {custom_script}")
                     
                     # Step 2: Generate voiceover
-                    st.info("Generating voiceover (offline)...")
+                    status_area.info("Generating voiceover (offline)...")
                     voiceover_path = generate_voiceover(custom_script, voice_type=voice_option.lower())
                     
                     # Step 3: Add captions to video
-                    st.info("Adding captions...")
+                    status_area.info("Adding captions...")
                     output_path = add_captions_to_video(
                         temp_file.name, 
                         custom_script, 
@@ -125,22 +135,19 @@ with col2:
                     )
                     
                     # Step 4: Display the result
-                    st.success("Video processing complete!")
-                    st.markdown('<div class="mobile-container">', unsafe_allow_html=True)
-                    st.video(output_path)
-                    st.markdown('</div>', unsafe_allow_html=True)
+                    status_area.success("Video processing complete!")
+                    captioned_preview.video(output_path)
                     
                     # Download button
-                    with open(output_path, "rb") as file:
-                        btn = st.download_button(
-                            label="Download Captioned Video",
-                            data=file,
-                            file_name="captioned_video.mp4",
-                            mime="video/mp4"
-                        )
+                    st.download_button(
+                        label="Download Captioned Video",
+                        data=open(output_path, "rb").read(),
+                        file_name="captioned_video.mp4",
+                        mime="video/mp4"
+                    )
                         
                 except Exception as e:
-                    st.error(f"An error occurred: {str(e)}")
+                    status_area.error(f"An error occurred: {str(e)}")
                 
                 # Clean up
                 try:
